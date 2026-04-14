@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@prisma/client':
-        specifier: '6'
+        specifier: ^6.19.3
         version: 6.19.3(prisma@6.19.3(typescript@6.0.2))(typescript@6.0.2)
       '@types/cookie-parser':
         specifier: ^1.4.10
@@ -33,7 +33,7 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
       prisma:
-        specifier: '6'
+        specifier: ^6.19.3
         version: 6.19.3(typescript@6.0.2)
       zod:
         specifier: ^4.3.6
