@@ -1,10 +1,11 @@
 import express from "express";
 import type { Express } from "express";
-import cookieParser from 'cookie-parser';
-import cors from 'cors'
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+import v1Router from "../src/routes/v1/index.js";
 
-const app : Express = express()
+const app: Express = express();
 
 app.use(
   cors({
@@ -23,7 +24,7 @@ app.get("/", (req, res) => {
 });
 
 // APIs
-
+app.use("/api/v1", v1Router);
 
 // Error handling middleware
 app.use(errorMiddleware);

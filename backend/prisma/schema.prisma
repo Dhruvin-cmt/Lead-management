@@ -12,8 +12,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    String @id @default(cuid())
-  name  String
-  email String
+enum Tech_category {
+  FRONTEND
+  BACKEND
+  DATABASE
+  TOOL
+  DATA_SCIENCE
+}
+
+model Technology {
+  id        String        @id @default(cuid())
+  name      String        
+  category  Tech_category
+  createdAt DateTime      @default(now())
+  isDelete  Boolean       @default(false)
 }
