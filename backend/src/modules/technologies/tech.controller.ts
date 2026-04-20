@@ -4,45 +4,24 @@ import { techServices } from "./index.js";
 import { prisma } from "../../config/prisma.client.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
+import { Tech_category } from "@prisma/client";
 
 export const addTechStack = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, category } = req.body;
 
     const isExist = await prisma.technology.findFirst({
-      where: { name: name, category: category },
+      where: { name: name, category: category, isDelete: false },
     });
     console.log(isExist);
 
-    if (
-      isExist &&
-      isExist?.isDelete === false &&
-      isExist?.category === category
-    ) {
+    if (isExist && isExist?.isDelete === false) {
       console.log("Technology with this name already registered");
       throw new ApiError(400, "Technology with this name already registered");
     }
 
-    if (
-      isExist &&
-      isExist.isDelete === true &&
-      isExist?.category === category
-    ) {
-      const restoredTech = await techServices.restoreTech(isExist);
-      console.log(restoredTech);
-      return res
-        .status(200)
-        .json(
-          new ApiResponse(
-            200,
-            restoredTech,
-            "Technology added/updated succesFully!"
-          )
-        );
-    }
-
     const result = await techServices.addNewTech({ name, category });
-    console.log("result", result);
+    // console.log("result", result);
 
     return res
       .status(200)
@@ -56,14 +35,16 @@ export const getAllTech = asyncHandler(
     const page = parseInt(req.query.page as string) || 1;
 
     const paginateDate = await techServices.getTech(limit, page);
-    console.log(paginateDate);
+    const totalData = await prisma.technology.count({
+      where: { isDelete: false },
+    });
 
     return res
       .status(200)
       .json(
         new ApiResponse(
           200,
-          paginateDate,
+          { paginateDate, totalData, page, limit },
           "Technology details fetch succesFully!"
         )
       );
@@ -74,12 +55,35 @@ export const deleteTech = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    const deletedTech = await techServices.removeTech(id as string);
+    if (!id) {
+      throw new ApiError(400, "ID did not found");
+    }
+
+    const isValid = await prisma.technology.findFirst({
+      where: { id: id, isDelete: false },
+    });
+    if (!isValid) {
+      console.log("User did not found!");
+      throw new ApiError(400, "Technology did not found");
+    }
+
+    const deletedTech = await techServices.removeTech(isValid.id as string);
 
     return res
       .status(200)
       .json(
         new ApiResponse(200, deletedTech, "Technology deleted succesfully!")
+      );
+  }
+);
+
+export const getAllCategory = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const categoryData = Object.values(Tech_category);
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, categoryData, "Tech Category fetch succesfully!")
       );
   }
 );

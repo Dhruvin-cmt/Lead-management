@@ -1,4 +1,3 @@
-import type { Technology } from "@prisma/client";
 import { prisma } from "../../config/prisma.client.js";
 import type { techStackData } from "./tech.validation.js";
 
@@ -11,15 +10,6 @@ export const addNewTech = async (info: techStackData) => {
     },
   });
   return addToDB;
-};
-
-export const restoreTech = async (info: Technology) => {
-  console.log("Update service start");
-  const restoreToDB = await prisma.technology.update({
-    where: { id: info.id },
-    data: { isDelete: false, createdAt: new Date() },
-  });
-  return restoreToDB;
 };
 
 export const getTech = async (limit: number, page: number) => {
