@@ -1,7 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { techServices } from "./index.js";
-import { prisma } from "../../config/prisma.client.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { Tech_category } from "@prisma/client";
@@ -10,9 +9,7 @@ export const addTechStack = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, category } = req.body;
 
-    const isExist = await prisma.technology.findFirst({
-      where: { name: name, category: category, isDelete: false },
-    });
+    const isExist = await techServices.userExist(name, category);
     console.log(isExist);
 
     if (isExist && isExist?.isDelete === false) {
@@ -35,9 +32,7 @@ export const getAllTech = asyncHandler(
     const page = parseInt(req.query.page as string) || 1;
 
     const paginateDate = await techServices.getTech(limit, page);
-    const totalData = await prisma.technology.count({
-      where: { isDelete: false },
-    });
+    const totalData = await techServices.getDocCount();
 
     return res
       .status(200)
@@ -59,9 +54,7 @@ export const deleteTech = asyncHandler(
       throw new ApiError(400, "ID did not found");
     }
 
-    const isValid = await prisma.technology.findFirst({
-      where: { id: id, isDelete: false },
-    });
+    const isValid = await techServices.validateUser(id as string);
     if (!isValid) {
       console.log("User did not found!");
       throw new ApiError(400, "Technology did not found");

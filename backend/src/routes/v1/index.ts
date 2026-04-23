@@ -1,5 +1,6 @@
 import express, { Router } from "express";
-import techRoute from "./technology.route.js";
+import techRoutes from "./technology.route.js";
+import devRoutes from './developer.route.js'
 
 const router: Router = express();
 
@@ -11,8 +12,12 @@ interface IRoute {
 const defaultRoute: IRoute[] = [
   {
     path: "/tech",
-    route: techRoute,
+    route: techRoutes,
   },
+  {
+    path: '/dev',
+    route: devRoutes
+  }
 ];
 
 defaultRoute.forEach((route) => {

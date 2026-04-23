@@ -20,10 +20,40 @@ enum Tech_category {
   DATA_SCIENCE
 }
 
+enum Dev_status {
+  ACTIVE
+  INACTIVE
+}
+
 model Technology {
-  id        String        @id @default(cuid())
-  name      String        
-  category  Tech_category
-  createdAt DateTime      @default(now())
-  isDelete  Boolean       @default(false)
+  id         String        @id @default(cuid())
+  name       String
+  category   Tech_category
+  createdAt  DateTime      @default(now())
+  isDelete   Boolean       @default(false)
+  Dev_Skills Dev_Skills[]
+}
+
+model Developer_Team {
+  id                 String       @id @default(cuid())
+  developer_name     String
+  email              String
+  joining_date       DateTime     @default(now())
+  expYearBeforeJoin  Int
+  expMonthBeforeJoin Int
+  techskills         Dev_Skills[]
+  position           String
+  reliving_date      DateTime?
+  salary             Decimal
+  isOnLeave          Boolean      @default(false)
+  status             Dev_status   @default(ACTIVE)
+}
+
+model Dev_Skills {
+  id      String @id @default(cuid())
+  dev_id  String
+  tech_id String
+
+  developer Developer_Team @relation(fields: [dev_id], references: [id], onDelete: Cascade)
+  techStack Technology     @relation(fields: [tech_id], references: [id], onDelete: Cascade)
 }
