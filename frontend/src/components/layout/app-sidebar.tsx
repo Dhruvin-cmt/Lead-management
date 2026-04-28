@@ -7,51 +7,49 @@ import {
   SidebarMenu,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-// import type { SidebarData } from "../types";
 import { Link } from "react-router-dom";
-import { sideData } from "./data/sidebar-data";
+import { sidebarConfig } from "./data/sidebar-data";
 import { Command } from "lucide-react";
 
-export function AppSidebar() {
+const AppSidebar: React.FC = () => {
   return (
-    <>
-    {/* Header */}
-      <Sidebar>
-        <SidebarHeader>
-          <SidebarMenuButton>
-            <Link to="/" className="flex items-start">
-              <Command className="size-4" />
-              <span className="font-semibold text-xl">Lead-Management</span>
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuButton size="lg">
+            <Link to="/">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Command className="size-4" />
+              </div>
+              <div className="flex flex-col gap-0.5 leading-none">
+                <span className="font-semibold">Lead-Management</span>
+                <span className="text-xs text-muted-foreground">v1.0.0</span>
+              </div>
             </Link>
           </SidebarMenuButton>
-        </SidebarHeader>
+        </SidebarMenu>
+      </SidebarHeader>
 
-      {/* content  */}
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarMenu>
-              {sideData.navGroups.map((item) => {
-                const key = `${item.title} - ${item.url}`;
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            {sidebarConfig.navMain.map((item) => (
+              <SidebarMenuButton key={item.title} tooltip={item.title}>
+                <Link to={item.url}>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
 
-                return (
-                  <SidebarMenuButton key={key}>
-                    <Link
-                      to={item.url}
-                      className="flex flex-column w-75 align-items-center"
-                    >
-                      <item.icon className="flex items-center justify-center" />
-                      <span className="pl-3 text-base">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroup>
-        </SidebarContent>
-
-        {/* Footer */}
-        <SidebarFooter>@2k26</SidebarFooter>
-      </Sidebar>
-    </>
+      <SidebarFooter className="p-4 text-xs text-muted-foreground border-t">
+        &copy; 2026 Admin Dashboard
+      </SidebarFooter>
+    </Sidebar>
   );
-}
+};
+
+export default AppSidebar;

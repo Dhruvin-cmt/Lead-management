@@ -32,7 +32,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { PlusIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { TechData } from "@/types/types";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -55,12 +55,12 @@ export default function TechPage() {
 
   const page = Number(searchParams.get("page")) || 1;
 
-  const techDetails = async () => {
+  const techDetails = useCallback(async () => {
     const ans = (await fetchTech(page)).data.data;
     const mPage = Math.ceil(ans.totalData / ans.limit);
     setMaxPage(mPage);
     return ans.paginateDate;
-  };
+  }, [page]);
 
   const addNewTech = async (techData: TechData) => {
     try {
@@ -94,7 +94,7 @@ export default function TechPage() {
       }
     };
     d();
-  }, [page]);
+  }, [techDetails]);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -230,7 +230,7 @@ export default function TechPage() {
       {/* ✅ MODAL OVERLAY */}
       {addToggle && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <Card className="w-[400px] shadow-lg">
+          <Card className="w-100 shadow-lg">
             <CardHeader>
               <CardTitle>Add New Tech</CardTitle>
               <CardDescription>

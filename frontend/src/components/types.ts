@@ -1,13 +1,13 @@
+import type { LucideIcon } from "lucide-react"
 import type { LinkProps } from "react-router-dom"
 
-type General = {
-    title : string,
-    url : LinkProps['to'] | (string & {}),
-    icon? : React.ElementType
+export interface NavItem {
+  title: string
+  url: LinkProps["to"]
+  icon?: LucideIcon
+  items?: NavItem[]
 }
 
-type SidebarData = {
-    navGroups : General[]
+export interface SidebarConfig {
+  navMain: NavItem[]
 }
-
-export type {SidebarData, General}

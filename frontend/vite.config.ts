@@ -11,4 +11,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    // Standard configurations work best on macOS. 
+    // Polling is only needed for networked filesystems.
+    watch: {
+      usePolling: false,
+    },
+  },
 });

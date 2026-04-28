@@ -1,12 +1,11 @@
 import type { TechData } from "@/types/types";
 import { api } from "./axios";
 
-export const fetchTech = (page: number) => api.get(`/api/v1/tech?page=${page}`);
+export const fetchTech = (all?: boolean, page?: number, limit?: number ) =>
+  api.get(`/tech?page=${page}&limit=${limit}&all=${all}`);
 
-export const newTech = (data: TechData) =>
-  api.post("/api/v1/tech/addnew", data);
+export const newTech = (data: TechData) => api.post("/tech/addnew", data);
 
-export const removeTech = (id: string) =>
-  api.patch(`/api/v1/tech/deletetech/${id}`);
+export const removeTech = (id: string) => api.patch(`/tech/deletetech/${id}`);
 
-export const categoryDetails = () => api.get("api/v1/tech/getcategory");
+export const categoryDetails = () => api.get("/tech/getcategory");

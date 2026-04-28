@@ -1,8 +1,8 @@
-import type { SidebarData } from "@/components/types";
+import type { SidebarConfig } from "@/components/types";
 import { Layers, User } from "lucide-react";
 
-export const sideData: SidebarData = {
-  navGroups: [
+export const sidebarConfig: SidebarConfig = {
+  navMain: [
     {
       title: "Tech Stack",
       url: "/tech",
@@ -10,7 +10,7 @@ export const sideData: SidebarData = {
     },
     {
       title: "Developer Team",
-      url: "devteam",
+      url: "/devteam",
       icon: User,
     },
   ],
