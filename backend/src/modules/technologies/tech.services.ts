@@ -13,8 +13,11 @@ export const addNewTech = async (info: techStackData) => {
   return addToDB;
 };
 
-export const getTech = async (limit: number, page: number) => {
+export const getTech = async (limit: number, page: number, all: boolean) => {
   console.log("Get all Tech details services start");
+  if (all) {
+    return await prisma.technology.findMany({ where: { isDelete: false } });
+  }
   const result = await prisma.technology.findMany({
     skip: (page - 1) * limit,
     take: limit,

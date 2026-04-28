@@ -39,9 +39,7 @@ export const getDevelopers = asyncHandler(
     const result = await devServices.fetchDevService(body);
     // console.log(result);
 
-    return res
-      .status(200)
-      .json(new ApiResponse(200, result, "Fetch all developers succesfully!"));
+    return res.status(200).json(result);
   }
 );
 
@@ -93,5 +91,15 @@ export const updateDev = asyncHandler(
     return res
       .status(200)
       .json(new ApiResponse(200, result, "Developer Updated!"));
+  }
+);
+
+export const getDevDetailsById = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const result = await devServices.fetchAllDetails(id as string);
+
+    return res.status(200).json(result);
   }
 );

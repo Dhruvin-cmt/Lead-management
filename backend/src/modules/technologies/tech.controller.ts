@@ -30,8 +30,19 @@ export const getAllTech = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const page = parseInt(req.query.page as string) || 1;
+    const toBoolean = (value: unknown): boolean => {
+      if (typeof value !== "string") return false;
+      return ["true"].includes(value.toLowerCase());
+    };
 
-    const paginateDate = await techServices.getTech(limit, page);
+    const all = toBoolean(req.query.all);
+    if(all) {
+      const allData = await techServices.getTech(limit, page, all);
+      const totalData = await techServices.getDocCount();
+      return res.json({allData, totalData})
+    }
+
+    const paginateDate = await techServices.getTech(limit, page, all);
     const totalData = await techServices.getDocCount();
 
     return res

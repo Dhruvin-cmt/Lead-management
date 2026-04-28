@@ -8,6 +8,9 @@ router
   .route("/")
   .get(devMiddleware.syncDeveloperStatusService, devController.getDevelopers);
 router
+  .route("/:id")
+  .get(devMiddleware.syncDeveloperStatusService, devController.getDevDetailsById);
+router
   .route("/delete/:id")
   .patch(devMiddleware.syncDeveloperStatusService, devController.removeDev);
 router

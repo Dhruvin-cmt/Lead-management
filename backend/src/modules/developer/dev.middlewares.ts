@@ -4,7 +4,7 @@ import { devServices } from "./index.js";
 
 export const syncDeveloperStatusService = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Sync Status service start");
+    console.log("Sync Status middleware start");
     const { id } = req.params;
     console.log(id);
     const date = new Date();
